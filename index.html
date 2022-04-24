@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Overcoming The Spectral Bias of Neural Value Approximation</title>
+    <meta name="description"
+          content="Value approximation using deep neural networks is at the
+          heart of off-policy deep reinforcement learning, and is often the
+          primary module that provides learning signals to the rest of the
+          algorithm. While multi-layer perceptron networks are universal
+          function approximators, recent works in neural kernel regression
+          suggest the presence of a <i>spectral bias</i>, where fitting high-
+          frequency components of the value function requires exponentially
+          more gradient update steps than the low-frequency ones. In this
+          work, we re-examine off-policy reinforcement learning through the
+          lens of kernel regression and propose to overcome such bias via a
+          composite neural tangent kernel. With just a single line-change, our
+          approach, the Fourier feature networks (FFN) produce state-of-the-art
+          performance on challenging continuous control domains with only a
+          fraction of the compute. Faster convergence and better off-policy
+          stability also make it possible to remove the target network without
+          suffering catastrophic divergences, which further reduces TD(0)'s estimation
+          bias on a few tasks.">
+    <meta name="keywords" content="Contrastive Learning, Deep Reinforcement Learning, Universal Value Function">
+    <meta name="author" content="Ge Yang <ge.ike.yang@gmail.com>">
+    <meta property="og:title" content="Plan2Vec: Unsupervised Representation Learning by Latent Plans">
+    <meta property="og:image" content="https://geyang.github.io/plan2vec/thumbnail.jpg">
+    <meta name="twitter:creator" content="@episodeyang">
+    <meta name="twitter:card" content="summary">
+    <meta property="og:description"
+          content="Value approximation using deep neural networks is at the
+          heart of off-policy deep reinforcement learning, and is often the
+          primary module that provides learning signals to the rest of the
+          algorithm. While multi-layer perceptron networks are universal
+          function approximators, recent works in neural kernel regression
+          suggest the presence of a <i>spectral bias</i>, where fitting high-
+          frequency components of the value function requires exponentially
+          more gradient update steps than the low-frequency ones. In this
+          work, we re-examine off-policy reinforcement learning through the
+          lens of kernel regression and propose to overcome such bias via a
+          composite neural tangent kernel. With just a single line-change, our
+          approach, the Fourier feature networks (FFN) produce state-of-the-art
+          performance on challenging continuous control domains with only a
+          fraction of the compute. Faster convergence and better off-policy
+          stability also make it possible to remove the target network without
+          suffering catastrophic divergences, which further reduces TD(0)'s estimation
+          bias on a few tasks.">
+    <style>
+        body {
+            margin: 0;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            right: 0;
+            font-size: 17px;
+        }
+
+        article {
+            font-family: Georgia, Times New Roman, Times, serif;
+            font-size: 100%;
+
+            display: grid;
+            align-items: center;
+
+            margin: 0;
+            padding-top: min(200px, 12%);
+            padding-bottom: 12%;
+
+            line-height: 1.5em;
+        }
+
+        #frontmatter {
+            display: contents
+        }
+
+        #frontmatter > h1,
+        #frontmatter > h2,
+        #frontmatter > h3 {
+            text-align: center;
+            grid-column: 2 / span 3;
+        }
+
+        #frontmatter h3 {
+            font-size: 100%;
+            font-weight: 100;
+        }
+
+        #frontmatter p {
+            grid-column: 3 / span 1;
+        }
+
+        #frontmatter iframe {
+            grid-column: 3 / span 1;
+        }
+
+        article {
+            grid-template-columns: 1fr 140px fit-content(600px) 140px 1fr;
+            grid-column-gap: 20px;
+        }
+
+        @media only screen and (max-width: 781px) {
+            article {
+                grid-template-columns: 1fr 0 fit-content(600px) 0 1fr;
+                grid-column-gap: 20px;
+            }
+
+            #frontmatter p {
+                grid-column: 2 / span 3;
+            }
+
+            #frontmatter iframe {
+                grid-column: 2 / span 3;
+            }
+        }
+
+        @media only screen and (min-width: 781px) and (max-width: 959px) {
+            article {
+                grid-template-columns: 1fr 1fr fit-content(600px) 1fr 1fr;
+                grid-column-gap: 20px;
+            }
+
+            #frontmatter p {
+                grid-column: 3 / span 1;
+            }
+
+            #frontmatter iframe {
+                grid-column: 3 / span 1;
+            }
+        }
+
+        #authors a {
+            color: inherit;
+            text-decoration: underline;
+        }
+
+        #authors a:hover {
+            color: #345cc1;
+        }
+
+        #links {
+            font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+            font-size: 115% !important;
+            color: #9f9f9f;
+        }
+
+        #links a {
+            color: #345cc1;
+            padding: 0 0.25em;
+        }
+
+        #links a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 150%;
+        }
+
+        h2 {
+            font-size: 110%
+        }
+
+        h3, h4, h5, h6, p {
+            font-size: 100%;
+        }
+
+        h2, h3, p {
+            text-align: justify;
+            text-justify: inter-word;
+            grid-column: 2 / span 3;
+        }
+
+        pre {
+            line-break: anywhere;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            grid-column: 2 / span 3;
+            transition: all 1s;
+            padding: 1em 0;
+            border-radius: 7px;
+            font-size: 95%;
+        }
+
+        pre:hover {
+            background: #eee;
+        }
+
+        sup {
+            position: relative;
+            left: -0.25em;
+            margin-right: -0.25em;
+        }
+
+        iframe.video {
+            margin: 1em 0;
+        }
+
+        a {
+            color: #345cc1;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+<article>
+    <section id="frontmatter">
+        <h1>Plan2Vec: Unsupervised Representation Learning by Latent Plans</h1>
+        <h2 id="authors" style="margin-bottom: 0;">Ge Yang,<sup>*†§</sup> Anurag Ajay,<sup>*§</sup>
+            Pulkit Agarwal<sup>§</sup>
+        </h2>
+        <h3 style="margin-top: 10px;"><sup>*</sup>Equal Contribution (random order),
+            <sup>†</sup>Institute of AI and Fundamental Interactions (IAIFI),
+            <sup>§</sup>Computer Science and Artificial Intelligence Laboratory (CSAIL), MIT</h3>
+        <h3 id="links">
+            <a href="https://github.com/geyang/ffn">CODE</a
+            >|<a href="https://github.com/geyang/ffn/blob/paper/main.pdf">PAPER</a
+        >|<a href="https://github.com/geyang/ffn/blob/slides/RFF%205min%20slides.pdf">SLIDES</a>
+        </h3>
+        <h2>Overview</h2>
+        <p>
+            We identify a learning bias for a multi-layer perceptron to favor low-frequency
+            function components as the source of learning instability during Q value iteration,
+            and propose random Fourier features as a solution that allows us to overcome this
+            spectral-bias.
+        </p>
+        <iframe class="video" width="100%" height="338px" src="https://www.youtube.com/embed/KtvTt3U5bME?rel=0"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+    </section>
+    <h2 id="abstract">Abstract</h2>
+    <p>
+        Value approximation using deep neural networks is at the
+        heart of off-policy deep reinforcement learning, and is often the
+        primary module that provides learning signals to the rest of the
+        algorithm. While multi-layer perceptron networks are universal
+        function approximators, recent works in neural kernel regression
+        suggest the presence of a <i>spectral bias</i>, where fitting high-
+        frequency components of the value function requires exponentially
+        more gradient update steps than the low-frequency ones. In this
+        work, we re-examine off-policy reinforcement learning through the
+        lens of kernel regression and propose to overcome such bias via a
+        composite neural tangent kernel. With just a single line-change, our
+        approach, the Fourier feature networks (FFN) produce state-of-the-art
+        performance on challenging continuous control domains with only a
+        fraction of the compute. Faster convergence and better off-policy
+        stability also make it possible to remove the target network without
+        suffering catastrophic divergences, which further reduces TD(0)'s estimation
+        bias on a few tasks.
+    </p>
+    <h2>BibTex</h2>
+    <pre>@inproceedings{
+        yang2022overcoming,
+        title={Overcoming The Spectral Bias of Neural Value Approximation},
+        author={Ge Yang and Anurag Ajay and Pulkit Agrawal},
+        booktitle={International Conference on Learning Representations},
+        year={2022},
+        url={https://openreview.net/forum?id=vIC-xLFuM6}
+    }</pre>
+</article>
+</body>
+</html>
