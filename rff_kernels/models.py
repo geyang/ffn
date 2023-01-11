@@ -2,6 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+
 class CLFF(nn.Module):
     """
     get torch.std_mean(self.B)
@@ -12,7 +13,7 @@ class CLFF(nn.Module):
         self.sincos = sincos
         self.scale = scale
         if self.sincos:
-            self.cff = nn.Conv2d(in_channel, out_channel//2, kernel_size, stride=stride)
+            self.cff = nn.Conv2d(in_channel, out_channel // 2, kernel_size, stride=stride)
         else:
             self.cff = nn.Conv2d(in_channel, out_channel, kernel_size, stride=stride)
         if init == "iso":
@@ -39,10 +40,12 @@ class CLFF(nn.Module):
         self.cff.weight = source.cff.weight
         self.cff.bias = source.cff.bias
 
+
 class CRFF(CLFF):
     def __init__(self, in_channel, out_channel, scale=1.0, kernel_size=1, stride=1, init="iso", sincos=False):
         super().__init__(in_channel, out_channel, scale, kernel_size, stride, init, sincos)
         self.cff.requires_grad = False
+
 
 class LFF(nn.Module):
     """
@@ -56,7 +59,7 @@ class LFF(nn.Module):
         self.out_features = out_features
         self.scale = scale
         if self.sincos:
-            self.linear = nn.Linear(in_features, self.out_features//2)
+            self.linear = nn.Linear(in_features, self.out_features // 2)
         else:
             self.linear = nn.Linear(in_features, self.out_features)
         if init == "iso":
@@ -81,6 +84,7 @@ class LFF(nn.Module):
         self.linear.weight = source.linear.weight
         self.linear.bias = source.linear.bias
 
+
 class RFF(LFF):
     def __init__(self, in_features, out_features, scale=1.0, **kwargs):
         super().__init__(in_features, out_features, scale=scale, **kwargs)
@@ -94,12 +98,15 @@ class RFF_tanick(RFF):
       High Frequency Functions In Low Dimensional Domains’, arXiv preprint arXiv.
       Available at: https://arxiv.org/abs/2006.10739.
     """
+
     def __init__(self, in_features, out_features, scale=1.0, **kwargs):
         super().__init__(in_features, out_features, scale=scale, init="iso", sincos=True)
+
 
 class SIREN(LFF):
     def __init__(self, in_features, out_features, scale=1.0, **kwargs):
         super().__init__(in_features, out_features, scale=scale, init="unif")
+
 
 RFF_dict = {
     'lff': LFF,
