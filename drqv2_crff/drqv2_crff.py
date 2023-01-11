@@ -18,7 +18,7 @@ from warnings import filterwarnings  # noqa
 from drqv2_crff.replay_buffer import Replay
 from drqv2_crff import utils
 from drqv2_crff.config import Args, Agent
-from params_proto.neo_proto import PrefixProto
+from params_proto import PrefixProto
 
 from .env_helpers import get_env
 import shutil

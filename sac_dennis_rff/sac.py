@@ -11,7 +11,7 @@ from . import utils
 from .actor import DiagGaussianActor
 from .critic import DoubleQCritic
 from .replay_buffer import ReplayBuffer
-from params_proto.neo_proto import ParamsProto, PrefixProto, Proto
+from params_proto import ParamsProto, PrefixProto, Proto
 from .config import Args, Actor, Critic, Agent
 from rff_kernels import models
 

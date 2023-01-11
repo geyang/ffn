@@ -4,7 +4,7 @@ if __name__ == '__main__':
     import jaynes
     from sac_dennis_rff.sac import train
     from sac_dennis_rff.config import Args, Actor, Critic, Agent
-    from params_proto.neo_hyper import Sweep
+    from params_proto.hyper import Sweep
 
     sweep = Sweep(RUN, Args, Actor, Critic, Agent).load("debug.jsonl")
 

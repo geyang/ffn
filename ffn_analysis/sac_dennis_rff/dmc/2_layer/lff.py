@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from params_proto.neo_hyper import Sweep
+from params_proto.hyper import Sweep
 
 from sac_dennis_rff.config import Args, Actor, Critic, Agent
 from ffn_analysis import RUN
