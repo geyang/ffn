@@ -1,0 +1,36 @@
+savefig.dpi: 300
+savefig.bbox: tight
+savefig.pad_inches: 0
+savefig.transparent: True
+
+axes.spines.top    : False
+axes.spines.right  : False
+
+font.family         : Times New Roman
+font.size           : 18.0
+axes.titlesize      : large
+axes.labelsize      : large
+
+legend.frameon       : False
+legend.scatterpoints : 3
+legend.fontsize      : medium
+
+#axes.color_cycle    : b, g, r, c, m, y, k  # color cycle for plot lines
+                                            # as list of string colorspecs:
+                                            # single letter, long name, or
+                                            # web-style hex
+
+### TICKS
+# see http://matplotlib.org/api/axis_api.html#matplotlib.axis.Tick
+xtick.major.size     : 8      # major tick size in points
+xtick.minor.size     : 4      # minor tick size in points
+xtick.major.width    : 1    # major tick width in points
+xtick.minor.width    : 1    # minor tick width in points
+#xtick.labelsize      : large # fontsize of the tick labels
+
+#ytick.major.size     : 8      # major tick size in points
+#ytick.minor.size     : 4      # minor tick size in points
+#ytick.major.width    : 1    # major tick width in points
+#ytick.minor.width    : 1    # minor tick width in points
+#ytick.labelsize      : large # fontsize of the tick labels
+
